@@ -1,0 +1,4 @@
+---
+title: "Welcome to my Website!"
+---
+<br><img src="images/images.png" alt="Thinking" style="width:30%; border:2px solid; color:darkgrey"></br>

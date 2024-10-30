@@ -1,0 +1,15 @@
+body {
+    background: linear-gradient(to bottom, #a1cbd9, beige);
+    background-attachment: fixed; /*edit*/
+}
+
+footer {
+    position: absolute;
+    bottom: 0px;
+    right: 50px;
+    height: 35px;
+    margin: 0px 50px 0px 0px;
+    color: darkblue;
+    text-align: right;
+    padding: 10px 30px;
+}
