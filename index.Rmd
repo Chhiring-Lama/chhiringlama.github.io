@@ -2,7 +2,6 @@
 title: "Welcome to my Website!"
 
 ---
-
 <img src="images/images.png" style="width:30%; border:2px solid; color:darkgrey">
 
 <div class="home">
