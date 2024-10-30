@@ -1,4 +1,13 @@
 ---
 title: "Welcome to my Website!"
+
 ---
-<br><img src="images/images.png" alt="Thinking" style="width:30%; border:2px solid; color:darkgrey"></br>
+
+<img src="images/images.png" style="width:30%; border:2px solid; color:darkgrey">
+
+<div class="home">
+**Chhiring Lama**<br>
+PhD Fellow<br>
+[Department of Biostatistics](https://www.publichealth.columbia.edu/academics/departments/biostatistics)<br>
+[Mailman School of Public Health, Columbia University](https://www.publichealth.columbia.edu/), USA.
+</div>
