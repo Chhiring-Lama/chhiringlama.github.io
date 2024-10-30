@@ -9,18 +9,14 @@ output:
 
 ### Bio
 
-I am a first-year Biostatistics PhD Fellow at the Columbia University Mailman School of Public Health. My research interest lie in understanding the underlying statistical models and computational methods in genomics and genetics.I have previously worked as a Computational Research Technician at Weill Cornell Medicine where I first got the opportunity to learn and work in genomics research. There, I conducted data processing and analysis and contributed to a scientific paper as a first author on the effects of interferon-alpha (IFN$\alpha$) on human blood development. I also pay a keen interest in learning more about science-based policies and decision making, and this is something I want to contribute to in the future. 
+I am a first-year Biostatistics PhD Fellow at the Columbia University Mailman School of Public Health. My research interest lie in understanding the underlying statistical models and computational methods in genomics and genetics.I have previously worked as a Computational Research Technician at Weill Cornell Medicine where I first got the opportunity to learn and work in genomics research. There, I conducted data processing and analysis and, completed a scientific paper as a first author on the effects of interferon-alpha (IFN$\alpha$) on human blood development. I also pay a keen interest in learning more about science-based policies and decision making, and contributing to the field in the future. 
 
-Apart from my interest in Public Health, I want looking to connect to my community back home in Nepal. In 2021, I co-founded an initiative - Aakar Nepal, where we connect with youths in high school and provide them with the resources and training to lead social initiatives in their community. It has been inspiring to see youngsters connect to mentors in their field of interest, form a community of like-minded people who want to pay it forward in the community. 
+Apart from my interest in public health, I seek to stay rooted with my community back home in Nepal. In 2021, I co-founded an initiative - Aakar Nepal, where we connect with youths in high school and provide them with the resources and training to lead social initiatives in their community. It has been inspiring to see youngsters network mentors in their field of interest, form a community of like-minded people who want to pay it forward in the community. 
 
-### Address
-
-**Mail:** [Department of Biostatistics](https://www.publichealth.columbia.edu/academics/departments/biostatistics)<br>
-[Mailman School of Public Health, Columbia University](https://www.publichealth.columbia.edu/), USA.
-
-**Office:** 722 West 168th Street FL 6, New York, NY 10032, United States
-
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3234.4896260475603!2d-73.94793761272332!3d40.842612855812305!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2f69be7d771a1%3A0xc311a525f0207329!2sColumbia%20University%20Mailman%20School%20of%20Public%20Health!5e1!3m2!1sen!2sus!4v1730307990943!5m2!1sen!2sus" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+[`r shiny::icon("linkedin")`](https://www.linkedin.com/in/chhiring-lama/)&nbsp;&nbsp;&nbsp;&nbsp;
+[`r shiny::icon("github")`](https://github.com/Chhiring-Lama)&nbsp;&nbsp;&nbsp;&nbsp;
+[`r shiny::icon("envelope")`](mailto:<cyl2159@cumc.columbia.com>)&nbsp;&nbsp;&nbsp;&nbsp;
+[`r shiny::icon("globe")`](https://aakarnepal.netlify.app/)
 
 ### Qualifications
 
@@ -29,34 +25,30 @@ Apart from my interest in Public Health, I want looking to connect to my communi
 
 ### Employment History
 
-* Computational Research Technician, Department of Experimental Pathology, Weill Cornell Medicine, 2021 - 2024
+* Computational Research Technician, Weill Cornell Medicine, 2021 - 2024
 * House Community Adviser, Residence Life, Smith College, 2018 - 2020
 
-### Internship History
+### Volunteering and Internship History
 
+* Co-Founder, Program Manager, Aakar Nepal, 2021 -
 * Summer Research Fellow - Data Analyst, Smith College, USA, 2020
 * Research Assistant, School of Public Health, University of Copenhagen, Denmark, 2020
 * Summer Intern, Group for Technical Assistance, Nepal, 2019
 * Summer Undergraduate Research Fellow, Smith College, USA, 2018
-
-### Volunteering Experience
-
-* Co-Founder, Program Manager, Aakar Nepal, 2021 -
 * Public Health Intern, Adara Nepal, 2017
 
-### Publications
-* First-Author: "Type 1 interferon perturbates clonal competition by reshaping human blood development" (Under Revision)
-* Co-Author: "ROS-CALR and TLR-B2m signaling balance "eat me" and "don't eat me" signals for HSC quality assurance by macrophages" (accepted in Science) 
+### Publications and Conferences
+* **First-Author**: "Type 1 interferon perturbates clonal competition by reshaping human blood development" (Under Revision)
+* **Co-Author**: "ROS-CALR and TLR-B2m signaling balance "eat me" and "don't eat me" signals for HSC quality assurance by macrophages" (accepted in Science) 
 * “Summary of the International Patient Safety Conference, June 28-29, 2019, Kathmandu, Nepal, Patient Saf Surg 13, 36 (2019)
+* **Presenter**: Starr Consortium Conference (2022, 2023), International Society of Stem Cell Research Conference (2023), International Society of Experimental Hematology (2022), Smith in the World Conference (2019)
+* **Organizer**: International Patient Safety Conference, Nepal (2019)
 
+### Address
 
+**Mail:** [Department of Biostatistics](https://www.publichealth.columbia.edu/academics/departments/biostatistics),
+[Mailman School of Public Health, Columbia University](https://www.publichealth.columbia.edu/), USA.
 
+**Office:** 722 West 168th Street FL 6, New York, NY 10032, United States
 
-
-
-
-
-
-
-
-
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3234.4896260475603!2d-73.94793761272332!3d40.842612855812305!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2f69be7d771a1%3A0xc311a525f0207329!2sColumbia%20University%20Mailman%20School%20of%20Public%20Health!5e1!3m2!1sen!2sus!4v1730307990943!5m2!1sen!2sus" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>

@@ -1,5 +1,5 @@
 ---
-title: "Dashboard"
+title: "Dashboard: NYC Restuarant Inspection (2015-2024)"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
@@ -10,9 +10,11 @@ output:
 ```{r include = FALSE,message=FALSE,warning=FALSE}
 library(flexdashboard)
 library(tidyverse)
-library(p8105.datasets)
-
+library(httr)
+library(jsonlite)
 library(plotly)
+library(sf)
+
 
 knitr::opts_chunk$set(
 	echo = TRUE,
@@ -33,60 +35,95 @@ scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
-Column {data-width=300}
+Column {data-width=350}
 -----------------------------------------------------------------------
 
 ```{r, message = FALSE, echo = FALSE, include=FALSE}
-data(nyc_airbnb)
+get_all_inspections = function(url) {
+  
+  all_inspections = vector("list", length = 0)
+  
+  loop_index = 1
+  chunk_size = 50000
+  DO_NEXT = TRUE
+  
+  while (DO_NEXT) {
+    message("Getting data, page ", loop_index)
+    
+    all_inspections[[loop_index]] = 
+      GET(url,
+          query = list(`$order` = "zipcode",
+                       `$limit` = chunk_size,
+                       `$offset` = as.integer((loop_index - 1) * chunk_size)
+                       )
+          ) %>%
+      content("text") %>%
+      fromJSON() %>%
+      as_tibble()
+    
+    DO_NEXT = dim(all_inspections[[loop_index]])[1] == chunk_size
+    loop_index = loop_index + 1
+  }
+  
+  all_inspections
+  
+}
+url = "https://data.cityofnewyork.us/resource/43nn-pn8j.json"
 
-nyc_airbnb = 
-  nyc_airbnb |> 
-  mutate(rating = review_scores_location / 2) |>
-  select(
-    neighbourhood_group, neighbourhood, rating, price, room_type, lat, long) |>
-  filter(
-    !is.na(rating), 
-    neighbourhood_group == "Manhattan",
-    room_type == "Entire home/apt",
-    price %in% 100:500)
+nyc_inspections <-  get_all_inspections(url) %>%
+  bind_rows() 
 ```
 
-### Chart A
+```{r}
+nyc_inspections_df <- nyc_inspections |> 
+  mutate(boro = case_when(boro == 0 ~ NA, 
+                          TRUE ~ boro), 
+         critical_flag = case_when(critical_flag == "Not Applicable" ~ "No Violation", 
+                          TRUE ~ critical_flag), 
+         inspection_date = case_when(inspection_date == "1900-01-01T00:00:00.000" ~ NA, 
+                          TRUE ~ inspection_date),
+         latitude = case_when(latitude == "0" ~ NA, 
+                              TRUE ~ as.numeric(latitude)), 
+         longitude =  case_when(longitude == "0" ~ NA, 
+                              TRUE ~ as.numeric(longitude)), 
+         score = as.numeric(score))
+
+```
+
+### Chart A: Average number of inspections per restaurant
 
 ```{r, echo = FALSE}
-scatter_ggplot = 
-  nyc_airbnb |>
-  ggplot(aes(x = lat, y = long, color = price)) +
-  geom_point(alpha = 0.25) +
-  coord_cartesian()
+score_distribution <- 
+  nyc_inspections_df |>
+  group_by(camis, longitude, latitude) |> 
+  summarize(average_score = mean(score, na.rm = TRUE)) |> 
+  ungroup() |> 
+  drop_na(average_score) |> 
+  ggplot(aes(x = latitude, y = longitude, color = average_score)) + 
+  geom_point(alpha = 0.6, size = 1) +
+  #scale_color_gradient(high = "darkred", low = "white")+
+  coord_cartesian()+
+  theme_classic()
 
-ggplotly(scatter_ggplot)
+ggplotly(score_distribution)
 ```
 
-Column {data-width=300}
+Column {data-width=6500}
 -----------------------------------------------------------------------
 
-### Chart B
+### Chart B: Code Violation Categories
 
 ```{r, echo = FALSE}
-box_ggplot <- nyc_airbnb |> 
-  mutate(neighbourhood = fct_reorder(neighbourhood, price)) |> 
-  ggplot(aes(x = neighbourhood, y = price, fill = neighbourhood)) +
-  geom_boxplot() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+nyc_inspections_df |> 
+  drop_na(critical_flag) |> 
+  count(boro, critical_flag) |> 
+  ggplot(aes(fill = critical_flag, x = n, group = boro, fill = boro)) +
+  geom_density(alpha = 0.5)
 
-ggplotly(box_ggplot)
 ```
 
 ### Chart C
 
 ```{r, echo = FALSE}
-bar_ggplot <- nyc_airbnb |> 
-  count(neighbourhood) |> 
-  mutate(neighbourhood = fct_reorder(neighbourhood, n)) |> 
-  ggplot(aes(x = neighbourhood, y = n, fill = neighbourhood)) +
-  geom_bar(position = "dodge", stat = "identity")+
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
-ggplotly(bar_ggplot)
 ```
