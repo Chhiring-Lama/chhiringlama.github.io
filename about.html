@@ -11,7 +11,7 @@
 
 
 
-<title>About</title>
+<title>About me</title>
 
 <script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -29,6 +29,9 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -222,6 +225,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -229,6 +295,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -284,27 +360,101 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">About</h1>
+<h1 class="title toc-ignore">About me</h1>
 
 </div>
 
 
-<div id="about-this-site" class="section level3">
-<h3>About this site</h3>
-<p>Sometimes you need to say a bit about the site – how it was made,
-where it’s hosted, where the source code can be found.</p>
-<p>If this is for a project or analysis, I recommend giving some details
-about the R package versions that you used to create the content.</p>
+<div id="bio" class="section level3">
+<h3>Bio</h3>
+<p>I am a first-year Biostatistics PhD Fellow at the Columbia University
+Mailman School of Public Health. My research interest lie in
+understanding the underlying statistical models and computational
+methods in genomics and genetics.I have previously worked as a
+Computational Research Technician at Weill Cornell Medicine where I
+first got the opportunity to learn and work in genomics research. There,
+I conducted data processing and analysis and contributed to a scientific
+paper as a first author on the effects of interferon-alpha (IFN<span
+class="math inline">\(\alpha\)</span>) on human blood development. I
+also pay a keen interest in learning more about science-based policies
+and decision making, and this is something I want to contribute to in
+the future.</p>
+<p>Apart from my interest in Public Health, I want looking to connect to
+my community back home in Nepal. In 2021, I co-founded an initiative -
+Aakar Nepal, where we connect with youths in high school and provide
+them with the resources and training to lead social initiatives in their
+community. It has been inspiring to see youngsters connect to mentors in
+their field of interest, form a community of like-minded people who want
+to pay it forward in the community.</p>
+</div>
+<div id="address" class="section level3">
+<h3>Address</h3>
+<p><strong>Mail:</strong> <a
+href="https://www.publichealth.columbia.edu/academics/departments/biostatistics">Department
+of Biostatistics</a><br> <a
+href="https://www.publichealth.columbia.edu/">Mailman School of Public
+Health, Columbia University</a>, USA.</p>
+<p><strong>Office:</strong> 722 West 168th Street FL 6, New York, NY
+10032, United States</p>
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3234.4896260475603!2d-73.94793761272332!3d40.842612855812305!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2f69be7d771a1%3A0xc311a525f0207329!2sColumbia%20University%20Mailman%20School%20of%20Public%20Health!5e1!3m2!1sen!2sus!4v1730307990943!5m2!1sen!2sus" width="400" height="300" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+</iframe>
+</div>
+<div id="qualification" class="section level3">
+<h3>Qualification</h3>
+<ul>
+<li>BA, Smith College, USA, 2021</li>
+<li>Enhanced A-Levels, Sussex Coast College, UK, 2016</li>
+</ul>
+</div>
+<div id="employment-history" class="section level3">
+<h3>Employment History</h3>
+<ul>
+<li>Computational Research Technician, Department of Experimental
+Pathology, Weill Cornell Medicine, 2021 - 2024</li>
+<li>House Community Adviser, Residence Life, Smith College, 2018 -
+2020</li>
+</ul>
+</div>
+<div id="internship-history" class="section level3">
+<h3>Internship History</h3>
+<ul>
+<li>Summer Research Fellow - Data Analyst, Smith College, USA, 2020</li>
+<li>Research Assistant, School of Public Health, University of
+Copenhagen, Denmark, 2020</li>
+<li>Summer Intern, Group for Technical Assistance, Nepal, 2019</li>
+<li>Summer Undergraduate Research Fellow, Smith College, USA, 2018</li>
+</ul>
+</div>
+<div id="volunteering-experience" class="section level3">
+<h3>Volunteering Experience</h3>
+<ul>
+<li>Co-Founder, Program Manager, Aakar Nepal, 2021 -</li>
+<li>Public Health Intern, Adara Nepal, 2017</li>
+</ul>
+</div>
+<div id="publications" class="section level3">
+<h3>Publications</h3>
+<ul>
+<li>First-Author: “Type 1 interferon perturbates clonal competition by
+reshaping human blood development” (Under Revision)</li>
+<li>Co-Author: “ROS-CALR and TLR-B2m signaling balance”eat me” and
+“don’t eat me” signals for HSC quality assurance by macrophages”
+(accepted in Science)</li>
+<li>“Summary of the International Patient Safety Conference, June 28-29,
+2019, Kathmandu, Nepal, Patient Saf Surg 13, 36 (2019)</li>
+</ul>
 </div>
 
 <br>
 <footer> 
 <right>
-<p class="className"> 2024 Chhiring Lama </p>
+<p> 2024 Chhiring Lama </p>
 </right>
 </footer>
 
 
+</div>
+</div>
 
 </div>
 
@@ -337,6 +487,35 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
