@@ -13,6 +13,8 @@ navbar:
       href: mailto:<cyl2159@cumc.columbia.com>
     - icon: fa-github fa-lg
       href: http://github.com/<Chhiring-Lama>/
+    - icon: fa-linkedin fa-lg
+      href: https://www.linkedin.com/in/chhiring-lama/  
 output: 
   html_document:
     theme: flatly
