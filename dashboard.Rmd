@@ -69,7 +69,7 @@ number_of_inspection <-
 ggplotly(number_of_inspection)
 ```
 
-> The average number of code violations for each restaurant remained below five at each year. However, during the later years, there were some restaurants who received large number of inspections during the year. 
+> The average number of code violations for each restaurant remained below five at each year. However, during the later years, particularly in 2015, there were some restaurants who had large number of violations. 
 
 ### Chart B: Critical and Non-critical Violations
 ```{r, echo = FALSE, fig.height=5}
@@ -86,7 +86,7 @@ critical_flag_cat <-
   ggplot(aes(x = critical_flag, y = n_violations, color = color, group = camis)) + 
   geom_path(linewidth = 0.5, alpha = 0.5)+
   geom_point(size = 0.5) +
-  labs(y = "Total Number (in 10 years)", 
+  labs(y = "Count (in 10 years)", 
        x = "Type of Violations per Restaurant", color = "") +
   scale_color_manual(values = c("#CC6666","#9999CC")) +
   theme_classic()
@@ -94,7 +94,7 @@ critical_flag_cat <-
 ggplotly(critical_flag_cat)
 ```
 
-> In the 7 years, restaurants have had a comparable number of both critical and non-critical violations. However, in most cases, they seem to have lot more critical violations registered than the non-critical ones. Missing values are those who either only have critical or only non-critical violations. 
+> In the 7 years, restaurants have had a comparable number of both critical and non-critical violations. However, in most cases, they seem to have more critical violations registered than the non-critical ones. Missing values are those who either only have critical or only non-critical violations. 
 
 Column {data-width=500}
 -----------------------------------------------------------------------
@@ -118,11 +118,11 @@ scatter_plot <-
   ggplot(aes(x = average_number_of_inspections, y = average_score, label = name)) +
   geom_point(size = 0.5, alpha = 0.5) +
   geom_smooth(method = lm, se = FALSE, linewidth = 0.5) +
-  ggpubr::stat_cor(method = "pearson", label.x = 1.2, label.y = max(scatter_plot$average_score, na.rm = T), output.type= "text") +
+  ggpubr::stat_cor(method = "pearson", label.x = 2.2, label.y = max(scatter_plot$average_score, na.rm = T), output.type= "text") +
   labs(y = "Average Violation Score", 
        x = "Average Number of Inspection", 
        color = "Violation Types") +
-  facet_wrap(~year, scales = "free", ncol = 2)
+  facet_wrap(~year, ncol = 2)
 
 ggplotly(scatter_plot)
 ```
