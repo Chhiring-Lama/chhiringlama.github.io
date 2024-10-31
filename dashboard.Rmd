@@ -1,16 +1,16 @@
 ---
-title: "Restaurant Inspections in Queens (2015-2024)"
+title: "Restaurant Inspections in Queens (2011-2017)"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
-    theme: flatly
 ---
 
 ```{r include = FALSE,message=FALSE,warning=FALSE}
 library(flexdashboard)
 library(tidyverse)
 library(httr)
+library(p8105.datasets)
 library(jsonlite)
 library(plotly)
 library(ggpubr)
@@ -36,115 +36,98 @@ scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
-column {data-width=500}
------------------------------------------------------------------------
-
 ```{r, message = FALSE, echo = FALSE, include=FALSE}
-get_all_inspections = function(url) {
-  
-  all_inspections = vector("list", length = 0)
-  
-  loop_index = 1
-  chunk_size = 50000
-  DO_NEXT = TRUE
-  
-  while (DO_NEXT) {
-    message("Getting data, page ", loop_index)
-    
-    all_inspections[[loop_index]] = 
-      GET(url,
-          query = list(`$order` = "zipcode",
-                       `$limit` = chunk_size,
-                       `$offset` = as.integer((loop_index - 1) * chunk_size)
-                       )
-          ) %>%
-      content("text") %>%
-      fromJSON() %>%
-      as_tibble()
-    
-    DO_NEXT = dim(all_inspections[[loop_index]])[1] == chunk_size
-    loop_index = loop_index + 1
-  }
-  
-  all_inspections
-  
-}
-url = "https://data.cityofnewyork.us/resource/43nn-pn8j.json"
+data("rest_inspec")
 
-nyc_inspections <-  get_all_inspections(url) %>%
-  bind_rows() 
-```
-
-```{r, message = FALSE, echo = FALSE, include=FALSE}
-nyc_inspections_df <- nyc_inspections |> 
-  mutate(boro = case_when(boro == 0 ~ NA, 
-                          TRUE ~ boro), 
-         critical_flag = case_when(critical_flag == "Not Applicable" ~ "No Violation", 
+nyc_inspections_df <- rest_inspec |> 
+  mutate(boro = str_to_title(boro), 
+         critical_flag = case_when(critical_flag == "Not Applicable" ~ NA, 
                           TRUE ~ critical_flag), 
-         inspection_date = case_when(inspection_date == "1900-01-01T00:00:00.000" ~ NA, 
+         inspection_date = case_when(inspection_date < 2011 ~ NA, 
                           TRUE ~ inspection_date),
-         latitude = case_when(latitude == "0" ~ NA, 
-                              TRUE ~ as.numeric(latitude)), 
-         longitude =  case_when(longitude == "0" ~ NA, 
-                              TRUE ~ as.numeric(longitude)), 
          score = as.numeric(score), 
          inspection_date = as.Date(inspection_date), 
          year = as.factor(year(inspection_date))) |> 
   filter(boro == "Queens") |> 
   drop_na(inspection_date)
-
 ```
 
-### Chart A: number of inspection per restaurant
+column {data-width=500}
+-----------------------------------------------------------------------
 
-```{r, echo = FALSE, warnin = FALSE, message = FALSE}
+### Chart A: Number of code violations registered per restaturant
+
+```{r, echo = FALSE, warnin = FALSE, message = FALSE, fig.height=15}
 number_of_inspection <- 
   nyc_inspections_df |> 
   count(camis, year) |> 
   ggplot(aes(x = year, y = n)) +
   geom_boxplot() +
-  labs(y = "Number of Inspections per Restuarant", 
+  labs(y = "Number of Violations per Restuarant", 
        x = "Year")
 
 ggplotly(number_of_inspection)
 ```
 
-> The average number of inspection for each restaurant remained below five at each year. However, during the recent years, there were some restaurants who received large number of inspections during the year. 
+> The average number of code violations for each restaurant remained below five at each year. However, during the later years, there were some restaurants who received large number of inspections during the year. 
 
-### Chart C: Have the scores improved in 2023 in Queens?
-```{r, echo = FALSE}
-nyc_inspections_df  |> 
-  filter(year(inspection_date) == 2023) |> 
-  ggplot(aes(x = inspection_date, y = score, group = camis)) +
-  geom_point(alpha = 0.5) + 
-  labs(x = "Date of Inspection",
-       y = "Score")
+### Chart B: Critical and Non-critical Violations
+```{r, echo = FALSE, fig.height=5}
+critical_flag_cat <- 
+  nyc_inspections_df |> 
+  drop_na(critical_flag) |> 
+  group_by(critical_flag, camis) |> 
+  summarize(n_violations = n()) |> 
+  group_by(camis) |> 
+  mutate(difference = (n_violations[2] - n_violations[1]), 
+         color = case_when(difference > 0 ~ "increase", 
+                           difference <= 0 ~ "decrease")) |> 
+  #mutate(critical_flag = forcats::fct_reorder(critical_flag, score, .na_rm = TRUE)) |> 
+  ggplot(aes(x = critical_flag, y = n_violations, color = color, group = camis)) + 
+  geom_path(linewidth = 0.5, alpha = 0.5)+
+  geom_point(size = 0.5) +
+  labs(y = "Total Number (in 10 years)", 
+       x = "Type of Violations per Restaurant", color = "") +
+  scale_color_manual(values = c("#CC6666","#9999CC")) +
+  theme_classic()
+
+ggplotly(critical_flag_cat)
 ```
+
+> In the 7 years, restaurants have had a comparable number of both critical and non-critical violations. However, in most cases, they seem to have lot more critical violations registered than the non-critical ones. Missing values are those who either only have critical or only non-critical violations. 
 
 Column {data-width=500}
 -----------------------------------------------------------------------
 
-### Chart B: Is the inspection score related to number of inspection that year?
+### Chart C: Is there an association between number of inspections and violation score (2014_2017)?
 
 ```{r, echo = FALSE, warning = FALSE}
 scatter_plot <- nyc_inspections_df |> 
-  group_by(critical_flag, year, camis, dba) |> 
-  summarize(average_score = mean(score, na.rm = TRUE), 
-            average_number_of_inspections = n()) |> 
-  mutate(name = str_to_title(dba)) |> 
-  ungroup() |> 
+  filter(year %in% c(2014, 2015, 2016, 2017)) |> 
+  group_by(inspection_date, camis, dba, year, cuisine_description) |> 
+  summarize(score = score[1]) |> 
+  group_by(cuisine_description, year) |> 
+  summarize(number_of_restaurants = length(unique(camis)), 
+            average_score = mean(score, na.rm = TRUE), 
+            average_number_of_inspections = n()/number_of_restaurants) |> 
+  mutate(name = str_to_title(cuisine_description)) |> 
+  ungroup() 
+
+scatter_plot <-  
+  scatter_plot |> 
   ggplot(aes(x = average_number_of_inspections, y = average_score, label = name)) +
-  geom_point(aes(color = critical_flag), size = 0.5, alpha = 0.6) +
-  geom_smooth(method = lm, se = FALSE) +
-  ggpubr::stat_cor(method = "pearson", label.x = 5, label.y = 125, output.type= "text") +
-  labs(y = "Average Score (in a Year/restaurant)", 
-       x = "Average Number of Inspection (in a Year/restaurant)", 
-       color = "Violation Types")
+  geom_point(size = 0.5, alpha = 0.5) +
+  geom_smooth(method = lm, se = FALSE, linewidth = 0.5) +
+  ggpubr::stat_cor(method = "pearson", label.x = 1.2, label.y = max(scatter_plot$average_score, na.rm = T), output.type= "text") +
+  labs(y = "Average Violation Score", 
+       x = "Average Number of Inspection", 
+       color = "Violation Types") +
+  facet_wrap(~year, scales = "free", ncol = 2)
 
 ggplotly(scatter_plot)
 ```
 
-> Restaurants that were found to violate more/critical City and State food safety requirements also received more inspections during the year. Many of the inspections could \be follow-ups. Similarly, it could also be that restuarants who are inspected more are likely to have more violations recorded. 
+> In the later years, cuisines whose restaurants were found to violate more/critical City and State food safety requirements also received more inspections during the year. Many of the inspections could be follow-ups. Similarly, it could also be that restuarants who are inspected more are likely to have more violations recorded.  
 
 
 
