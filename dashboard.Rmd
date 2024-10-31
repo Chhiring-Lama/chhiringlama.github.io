@@ -1,5 +1,5 @@
 ---
-title: "Dashboard: NYC Restuarant Inspection (2015-2024)"
+title: "Restaurant Inspections in Queens (2015-2024)"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
@@ -13,7 +13,8 @@ library(tidyverse)
 library(httr)
 library(jsonlite)
 library(plotly)
-library(sf)
+library(ggpubr)
+library(stringr)
 
 
 knitr::opts_chunk$set(
@@ -35,7 +36,7 @@ scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
-Column {data-width=350}
+column {data-width=500}
 -----------------------------------------------------------------------
 
 ```{r, message = FALSE, echo = FALSE, include=FALSE}
@@ -74,7 +75,7 @@ nyc_inspections <-  get_all_inspections(url) %>%
   bind_rows() 
 ```
 
-```{r}
+```{r, message = FALSE, echo = FALSE, include=FALSE}
 nyc_inspections_df <- nyc_inspections |> 
   mutate(boro = case_when(boro == 0 ~ NA, 
                           TRUE ~ boro), 
@@ -86,44 +87,64 @@ nyc_inspections_df <- nyc_inspections |>
                               TRUE ~ as.numeric(latitude)), 
          longitude =  case_when(longitude == "0" ~ NA, 
                               TRUE ~ as.numeric(longitude)), 
-         score = as.numeric(score))
+         score = as.numeric(score), 
+         inspection_date = as.Date(inspection_date), 
+         year = as.factor(year(inspection_date))) |> 
+  filter(boro == "Queens") |> 
+  drop_na(inspection_date)
 
 ```
 
-### Chart A: Average number of inspections per restaurant
+### Chart A: number of inspection per restaurant
 
+```{r, echo = FALSE, warnin = FALSE, message = FALSE}
+number_of_inspection <- 
+  nyc_inspections_df |> 
+  count(camis, year) |> 
+  ggplot(aes(x = year, y = n)) +
+  geom_boxplot() +
+  labs(y = "Number of Inspections per Restuarant", 
+       x = "Year")
+
+ggplotly(number_of_inspection)
+```
+
+> The average number of inspection for each restaurant remained below five at each year. However, during the recent years, there were some restaurants who received large number of inspections during the year. 
+
+### Chart C: Have the scores improved in 2023 in Queens?
 ```{r, echo = FALSE}
-score_distribution <- 
-  nyc_inspections_df |>
-  group_by(camis, longitude, latitude) |> 
-  summarize(average_score = mean(score, na.rm = TRUE)) |> 
-  ungroup() |> 
-  drop_na(average_score) |> 
-  ggplot(aes(x = latitude, y = longitude, color = average_score)) + 
-  geom_point(alpha = 0.6, size = 1) +
-  #scale_color_gradient(high = "darkred", low = "white")+
-  coord_cartesian()+
-  theme_classic()
-
-ggplotly(score_distribution)
+nyc_inspections_df  |> 
+  filter(year(inspection_date) == 2023) |> 
+  ggplot(aes(x = inspection_date, y = score, group = camis)) +
+  geom_point(alpha = 0.5) + 
+  labs(x = "Date of Inspection",
+       y = "Score")
 ```
 
-Column {data-width=6500}
+Column {data-width=500}
 -----------------------------------------------------------------------
 
-### Chart B: Code Violation Categories
+### Chart B: Is the inspection score related to number of inspection that year?
 
-```{r, echo = FALSE}
-nyc_inspections_df |> 
-  drop_na(critical_flag) |> 
-  count(boro, critical_flag) |> 
-  ggplot(aes(fill = critical_flag, x = n, group = boro, fill = boro)) +
-  geom_density(alpha = 0.5)
+```{r, echo = FALSE, warning = FALSE}
+scatter_plot <- nyc_inspections_df |> 
+  group_by(critical_flag, year, camis, dba) |> 
+  summarize(average_score = mean(score, na.rm = TRUE), 
+            average_number_of_inspections = n()) |> 
+  mutate(name = str_to_title(dba)) |> 
+  ungroup() |> 
+  ggplot(aes(x = average_number_of_inspections, y = average_score, label = name)) +
+  geom_point(aes(color = critical_flag), size = 0.5, alpha = 0.6) +
+  geom_smooth(method = lm, se = FALSE) +
+  ggpubr::stat_cor(method = "pearson", label.x = 5, label.y = 125, output.type= "text") +
+  labs(y = "Average Score (in a Year/restaurant)", 
+       x = "Average Number of Inspection (in a Year/restaurant)", 
+       color = "Violation Types")
 
+ggplotly(scatter_plot)
 ```
 
-### Chart C
+> Restaurants that were found to violate more/critical City and State food safety requirements also received more inspections during the year. Many of the inspections could \be follow-ups. Similarly, it could also be that restuarants who are inspected more are likely to have more violations recorded. 
 
-```{r, echo = FALSE}
 
-```
+
